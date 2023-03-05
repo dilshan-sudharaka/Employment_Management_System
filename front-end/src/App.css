@@ -1,0 +1,44 @@
+
+.nav {
+    margin-left: 50px;
+    font-weight: 500;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+}
+  
+.button-container button {
+    margin-right: 10px;
+    margin-left: 20px;
+    margin-bottom: 30px;
+}
+
+.table-head th{
+    font-weight: normal;
+}
+
+
+select {
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background-color: #fff;
+    color: #555;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+.d-flex button{
+    margin-left: 20px;
+}
+  
+  
+
+  
+  
+  
+  
+  
+  
