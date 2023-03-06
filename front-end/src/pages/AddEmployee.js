@@ -104,6 +104,7 @@ const AddEmployee = () => {
         note: " ",
       });
       alert("Employee Added Successfully");
+      window.location.href = "/";
     } catch (err) {
       console.error("error", err.response.data);
       alert("Employee Not Added");
@@ -126,7 +127,7 @@ const AddEmployee = () => {
             name="fullName"
             value={fullName}
             onChange={(e) => onChange(e)}
-            pattern="[A-Za-z\s]{2,50}"
+            pattern="[A-Za-z\s]{2,100}"
             title="The full name must contain minimum 2 letters and maximum 50 letters"
             placeholder="ex: kolamba arachchige don saman perera"
             required
@@ -233,7 +234,7 @@ const AddEmployee = () => {
               className="form-control"
               name="designation"
               value={designation}
-              pattern="[A-Za-z\s]{2,20}"
+              pattern="[A-Za-z\s]{2,50}"
               title="The first designation must contain minimum 2 letters and maximum 20 letters"
               onChange={(e) => onChange(e)}
               placeholder="ex: senior developer"

@@ -1,7 +1,6 @@
 const router = require("express").Router();
 let Employee = require("../models/employee");
 
-
 //Add EMPLOYEE (http://localhost:5000/employee/add)
 
 router.route("/add").post((req, res) => {  //get data from frontend via request

@@ -95,7 +95,7 @@ const UpdateEmployee = () => {
             name="fullName"
             value={currentEmployee.fullName}
             onChange={handleInputChange}
-            pattern="[A-Za-z\s]{2,50}"
+            pattern="[A-Za-z\s]{2,100}"
             title="The full name must contain minimum 2 letters and maximum 50 letters"
             placeholder="ex: kolamba arachchige don saman perera"
             required
@@ -111,7 +111,7 @@ const UpdateEmployee = () => {
               name="initialName"
               value={currentEmployee.initialName}
               onChange={handleInputChange}
-              pattern="[A-Za-z\W\s]{2,30}"
+              pattern="[A-Za-z\W\s]{2,50}"
               title="The initial name must contain minimum 2 letters and maximum 30 letters"
               placeholder="ex: k.a.d.s perera"
               required
@@ -126,7 +126,7 @@ const UpdateEmployee = () => {
               name="displayName"
               value={currentEmployee.displayName}
               onChange={handleInputChange}
-              pattern="[A-Za-z\s]{2,20}"
+              pattern="[A-Za-z\s]{2,50}"
               title="The display name must contain minimum 2 letters and maximum 20 letters"
               placeholder="ex: saman perera"
               required
@@ -202,7 +202,7 @@ const UpdateEmployee = () => {
               className="form-control"
               name="designation"
               value={currentEmployee.designation}
-              pattern="[A-Za-z\s]{2,20}"
+              pattern="[A-Za-z\s]{2,50}"
               title="The first designation must contain minimum 2 letters and maximum 20 letters"
               onChange={handleInputChange}
               placeholder="ex: senior developer"
