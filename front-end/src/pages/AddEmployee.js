@@ -1,10 +1,9 @@
 import React from "react";
-import { useState } from 'react';
+import { useState } from "react";
+import axios from "axios";
 
 const AddEmployee = () => {
-
   const [formData, setFormData] = useState({
-
     fullName: "",
     initialName: "",
     displayName: "",
@@ -17,67 +16,139 @@ const AddEmployee = () => {
     joinedDate: "",
     experience: "",
     salary: "",
-    note: ""
-
+    note: "",
   });
 
-  const { fullName, initialName, displayName, gender, dateOfBirth, email, mobileNumber, designation, employeeType, joinedDate, experience, salary, note} = formData;
+  const {
+    fullName,
+    initialName,
+    displayName,
+    gender,
+    dateOfBirth,
+    email,
+    mobileNumber,
+    designation,
+    employeeType,
+    joinedDate,
+    experience,
+    salary,
+    note,
+  } = formData;
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  console.log(
+    fullName,
+    initialName,
+    displayName,
+    gender,
+    dateOfBirth,
+    email,
+    mobileNumber,
+    designation,
+    employeeType,
+    joinedDate,
+    experience,
+    salary,
+    note
+  );
 
-  console.log(fullName, initialName, displayName, gender, dateOfBirth, email, mobileNumber, designation, employeeType, joinedDate, experience, salary, note);
-
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const newEmployee = {
+      fullName: fullName,
+      initialName: initialName,
+      displayName: displayName,
+      gender: gender,
+      dateOfBirth: dateOfBirth,
+      email: email,
+      mobileNumber: mobileNumber,
+      designation: designation,
+      employeeType: employeeType,
+      joinedDate: joinedDate,
+      experience: experience,
+      salary: salary,
+      note: note,
+    };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const body = JSON.stringify(newEmployee);
+      await axios.post("http://localhost:5000/employee/add", body, config);
+      setFormData({
+        fullName: "",
+        initialName: "",
+        displayName: "",
+        gender: "",
+        dateOfBirth: "",
+        email: "",
+        mobileNumber: "",
+        designation: "",
+        employeeType: "",
+        joinedDate: "",
+        experience: "",
+        salary: "",
+        note: "",
+      });
+      alert("Employee Added Successfully");
+    } catch (err) {
+      console.error("error", err.response.data);
+      alert("Employee Not Added");
+    }
+  };
 
   return (
     <div className="container mt-5">
       {/* add employee start */}
 
-      <form className="form-style">
+      <form className="form-style" onSubmit={(e) => onSubmit(e)}>
         <div className="mb-3 col-md-12 col-12">
-          <label for="inputFullName">Full Name</label>
+          <label for="inputFullName">Full Name *</label>
           <input
             type="text"
             className="form-control"
             name="fullName"
             value={fullName}
             onChange={(e) => onChange(e)}
-            pattern="[A-Za-z]{2,40}"
-            title="The first name must contain letters only"
-            placeholder="Full Name"
+            pattern="[A-Za-z\s]{2,50}"
+            title="The full name must contain minimum 2 letters and maximum 50 letters"
+            placeholder="ex: kolamba arachchige don saman perera"
             required
           />
         </div>
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputInitials">Name with initials*</label>
+            <label for="inputInitials">Name with initials *</label>
             <input
               type="text"
               className="form-control"
               name="initialName"
               value={initialName}
               onChange={(e) => onChange(e)}
-              pattern="[A-Za-z]{2,20}"
-              title="The first name must contain letters only"
-              placeholder="Initial Name"
+              pattern="[A-Za-z\W\s]{2,30}"
+              title="The initial name must contain minimum 2 letters and maximum 30 letters"
+              placeholder="ex: k.a.d.s perera"
               required
             />
           </div>
 
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputDisplayName">Preferred / Display Name</label>
+            <label for="inputDisplayName">Preferred / Display Name *</label>
             <input
               type="text"
               className="form-control"
               name="displayName"
               value={displayName}
               onChange={(e) => onChange(e)}
-              pattern="[A-Za-z]{2,20}"
-              title="The first name must contain letters only"
-              placeholder="Preferred Name"
+              pattern="[A-Za-z\s]{2,20}"
+              title="The display name must contain minimum 2 letters and maximum 20 letters"
+              placeholder="ex: saman perera"
               required
             />
           </div>
@@ -85,22 +156,29 @@ const AddEmployee = () => {
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputGender">Gender</label>
-            <select id="inputGender" className="form-control" name="gender" value={gender} onChange={(e) => onChange(e)} required>
+            <label for="inputGender">Gender *</label>
+            <select
+              id="inputGender"
+              className="form-control"
+              name="gender"
+              value={gender}
+              onChange={(e) => onChange(e)}
+              required
+            >
+              <option value="" selected disabled>select your gender</option>
               <option value="Male" selected>Male</option>
               <option value="Female">Female</option>
             </select>
           </div>
 
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputBirthday">Date of Birth</label>
+            <label for="inputBirthday">Date of Birth *</label>
             <input
               type="date"
               className="form-control"
               name="dateOfBirth"
               value={dateOfBirth}
               onChange={(e) => onChange(e)}
-              placeholder="Birthday"
               required
             />
           </div>
@@ -108,29 +186,29 @@ const AddEmployee = () => {
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputEmail4">Email</label>
+            <label for="inputEmail4">Email *</label>
             <input
               type="email"
               className="form-control"
               name="email"
               value={email}
               onChange={(e) => onChange(e)}
-              placeholder="Email"
+              placeholder="ex: abc@gmail.com"
               required
             />
           </div>
 
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputMobileNumber">Mobile Number</label>
+            <label for="inputMobileNumber">Mobile Number *</label>
             <input
               type="tel"
               className="form-control"
               name="mobileNumber"
               value={mobileNumber}
-              pattern="[0-9]{11}" 
-              title="Enter valid contact number (ex - 94757713501)" 
+              pattern="[0-9]{11}"
+              title="Enter valid contact number (ex - 94757713501)"
               onChange={(e) => onChange(e)}
-              placeholder="Mobile Number"
+              placeholder="ex: 94757713501"
               required
             />
           </div>
@@ -138,27 +216,35 @@ const AddEmployee = () => {
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputDesignation">Designation</label>
+            <label for="inputDesignation">Designation *</label>
             <input
               type="text"
               className="form-control"
               name="designation"
               value={designation}
-              pattern="[A-Za-z]{2,20}" 
-              title="The first name must contain letters only" 
+              pattern="[A-Za-z\s]{2,20}"
+              title="The first designation must contain minimum 2 letters and maximum 20 letters"
               onChange={(e) => onChange(e)}
-              placeholder="Designation"
+              placeholder="ex: senior developer"
               required
             />
           </div>
 
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputEmployeeType">Employee Type</label>
-            <select id="inputEmployeeType" name="employeeType" value={employeeType} className="form-control" onChange={(e) => onChange(e)} required>
-              <option value="full-time" selected>Full time</option>
-              <option value="part-time">Part time</option>
-              <option value="contract-basis">Contract Basis</option>
-              <option value="others">Others</option>
+            <label for="inputEmployeeType">Employee Type *</label>
+            <select
+              id="inputEmployeeType"
+              name="employeeType"
+              value={employeeType}
+              className="form-control"
+              onChange={(e) => onChange(e)}
+              required
+            >
+              <option value="" selected disabled>select employee type</option>
+              <option value="Full time">Full time</option>
+              <option value="Part time">Part time</option>
+              <option value="Contract basis">Contract basis</option>
+              <option value="Others">Others</option>
             </select>
           </div>
         </div>
@@ -166,21 +252,28 @@ const AddEmployee = () => {
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
             <label for="inputJoinedDate">Joined Date</label>
-            <input 
-              type="date" 
-              className="form-control" 
+            <input
+              type="date"
+              className="form-control"
               name="joinedDate"
               value={joinedDate}
-              onChange={(e) => onChange(e)} 
-              required 
+              onChange={(e) => onChange(e)}
             />
           </div>
 
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputExperience">Experience</label>
-            <select id="inputExperience" name="experience" value={experience} className="form-control" onChange={(e) => onChange(e)} required>
-              <option value="0 Years">0 Years</option>
-              <option value="1 Years" selected>1 Years</option>
+            <label for="inputExperience">Experience *</label>
+            <select
+              id="inputExperience"
+              name="experience"
+              value={experience}
+              className="form-control"
+              onChange={(e) => onChange(e)}
+              required
+            >
+              <option value="" selected disabled>select your experience</option>
+              <option value="No Experience">No Experience</option>
+              <option value="1 Year">1 Year</option>
               <option value="2 Years">2 Years</option>
               <option value="3 Years">3 Years</option>
             </select>
@@ -189,15 +282,17 @@ const AddEmployee = () => {
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputSalary">Salary</label>
+            <label for="inputSalary">Salary (Rs)</label>
             <input
               type="number"
+              min="0" 
+              max="99999999" 
+              step="1"
               className="form-control"
               name="salary"
               value={salary}
               onChange={(e) => onChange(e)}
-              placeholder="Salary"
-              required
+              placeholder="ex: 25000"
             />
           </div>
         </div>
@@ -215,7 +310,6 @@ const AddEmployee = () => {
         </div>
 
         <button type="submit" className="btn btn-primary">Add People</button>
-        <button type="submit">Cancel</button>
 
       </form>
 
