@@ -92,7 +92,7 @@ router.route("/search").get((req, res) => {
 router.route("/get/:id").get(async (req, res) => { // get data from frontend via request. async function is used to increase the performance 
     let empId = req.params.id; //fetch the id parameter in url
 
-    const pack = await Employee.findById(empId) //pass two parameters(userid,object that store seller data) and find user by id and update relevent data
+    const pack = await Employee.findById(empId) //pass two parameters(userid,object that store employee data) and find user by id and update relevent data
         .then((employees) => {
             res.status(200).send({ status: "employee fetched", employees })
         }).catch((err) => {

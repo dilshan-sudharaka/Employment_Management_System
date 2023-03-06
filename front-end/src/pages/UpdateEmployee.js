@@ -1,122 +1,91 @@
 import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-const AddEmployee = () => {
+const UpdateEmployee = () => {
 
   // Redirect page
   const navigate = useNavigate();
   const routeToHome = () => {navigate('/')}
 
-  // Add Employee
-  const [formData, setFormData] = useState({
-    fullName: "",
-    initialName: "",
-    displayName: "",
-    gender: "",
-    dateOfBirth: "",
-    email: "",
-    mobileNumber: "",
-    designation: "",
-    employeeType: "",
-    joinedDate: "",
-    experience: "",
-    salary: "",
-    note: " ",
-  });
+  // Get current Id
+  const [currentEmployee, setCurrentEmployee] = useState({});
+  const { id } = useParams();
 
-  const {
-    fullName,
-    initialName,
-    displayName,
-    gender,
-    dateOfBirth,
-    email,
-    mobileNumber,
-    designation,
-    employeeType,
-    joinedDate,
-    experience,
-    salary,
-    note,
-  } = formData;
+  // Call getCurrentData function
+  useEffect(() => {    
+    try {
+        getCurrentData(id);
+        console.log(id);
+      }catch (err) {
+        console.error("error", err);
+      } 
+  }, [id]);
 
-  // get input value and set
-  const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  console.log(
-    fullName,
-    initialName,
-    displayName,
-    gender,
-    dateOfBirth,
-    email,
-    mobileNumber,
-    designation,
-    employeeType,
-    joinedDate,
-    experience,
-    salary,
-    note
-  );
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    const newEmployee = {
-      fullName: fullName,
-      initialName: initialName,
-      displayName: displayName,
-      gender: gender,
-      dateOfBirth: dateOfBirth,
-      email: email,
-      mobileNumber: mobileNumber,
-      designation: designation,
-      employeeType: employeeType,
-      joinedDate: joinedDate,
-      experience: experience,
-      salary: salary,
-      note: note,
-    };
+  const getCurrentData = async (id) => {
     const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
+        headers: {
+            "Content-Type": "application/json",
+        },
     };
     try {
-      const body = JSON.stringify(newEmployee);
-      await axios.post("http://localhost:5000/employee/add", body, config);
-      setFormData({
-        fullName: "",
-        initialName: "",
-        displayName: "",
-        gender: "",
-        dateOfBirth: "",
-        email: "",
-        mobileNumber: "",
-        designation: "",
-        employeeType: "",
-        joinedDate: "",
-        experience: "",
-        salary: "",
-        note: " ",
-      });
-      alert("Employee Added Successfully");
+        const res = await axios.get(`http://localhost:5000/employee/get/${id}`, config);
+        setCurrentEmployee(res.data.employees);
+        console.log(res.data.employees);
     } catch (err) {
-      console.error("error", err.response.data);
-      alert("Employee Not Added");
+        console.error("error", err);
     }
   };
 
+  // Get updated input value and set 
+  const handleInputChange = (event) => {
+    setCurrentEmployee({
+        ...currentEmployee,
+        [event.target.name]: event.target.value,
+    });
+  };
+
+  // Update employee data
+  const updateData = async (id) => {
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };   
+    
+    await axios.put(
+      `http://localhost:5000/employee/update/${id}`,
+      currentEmployee,
+      config
+    );
+    setCurrentEmployee({
+        fullName: currentEmployee.fullName,
+        initialName: currentEmployee.initialName,
+        displayName: currentEmployee.displayName,
+        gender: currentEmployee.gender,
+        dateOfBirth: currentEmployee.dateOfBirth,
+        email: currentEmployee.email,
+        mobileNumber: currentEmployee.mobileNumber,
+        designation: currentEmployee.designation,
+        employeeType: currentEmployee.employeeType,
+        joinedDate: currentEmployee.joinedDate,
+        experience: currentEmployee.experience,
+        salary: currentEmployee.salary,
+        note: currentEmployee.note
+      });
+      alert("your employee details successfully updated"); 
+      window.location.href = "/";
+
+  };
+
+  
 
   return (
     <div className="container mt-4">
-
-      <h2 className="center">Add Employee</h2>
-
-      <form className="form-style" onSubmit={(e) => onSubmit(e)}>
+      <h2 className="center">Update Employee</h2>
+      <form className="form-style" onSubmit={(e) => updateData(id)}>
 
         <div className="mb-3 col-md-12 col-12">
           <label for="inputFullName">Full Name *</label>
@@ -124,8 +93,8 @@ const AddEmployee = () => {
             type="text"
             className="form-control"
             name="fullName"
-            value={fullName}
-            onChange={(e) => onChange(e)}
+            value={currentEmployee.fullName}
+            onChange={handleInputChange}
             pattern="[A-Za-z\s]{2,50}"
             title="The full name must contain minimum 2 letters and maximum 50 letters"
             placeholder="ex: kolamba arachchige don saman perera"
@@ -140,8 +109,8 @@ const AddEmployee = () => {
               type="text"
               className="form-control"
               name="initialName"
-              value={initialName}
-              onChange={(e) => onChange(e)}
+              value={currentEmployee.initialName}
+              onChange={handleInputChange}
               pattern="[A-Za-z\W\s]{2,30}"
               title="The initial name must contain minimum 2 letters and maximum 30 letters"
               placeholder="ex: k.a.d.s perera"
@@ -155,8 +124,8 @@ const AddEmployee = () => {
               type="text"
               className="form-control"
               name="displayName"
-              value={displayName}
-              onChange={(e) => onChange(e)}
+              value={currentEmployee.displayName}
+              onChange={handleInputChange}
               pattern="[A-Za-z\s]{2,20}"
               title="The display name must contain minimum 2 letters and maximum 20 letters"
               placeholder="ex: saman perera"
@@ -172,8 +141,8 @@ const AddEmployee = () => {
               id="inputGender"
               className="form-control"
               name="gender"
-              value={gender}
-              onChange={(e) => onChange(e)}
+              value={currentEmployee.gender}
+              onChange={handleInputChange}
               required
             >
               <option value="" selected disabled>select your gender</option>
@@ -188,8 +157,8 @@ const AddEmployee = () => {
               type="date"
               className="form-control"
               name="dateOfBirth"
-              value={dateOfBirth}
-              onChange={(e) => onChange(e)}
+              value={currentEmployee.dateOfBirth}
+              onChange={handleInputChange}
               required
             />
           </div>
@@ -202,8 +171,8 @@ const AddEmployee = () => {
               type="email"
               className="form-control"
               name="email"
-              value={email}
-              onChange={(e) => onChange(e)}
+              value={currentEmployee.email}
+              onChange={handleInputChange}
               placeholder="ex: abc@gmail.com"
               required
             />
@@ -215,10 +184,10 @@ const AddEmployee = () => {
               type="tel"
               className="form-control"
               name="mobileNumber"
-              value={mobileNumber}
+              value={currentEmployee.mobileNumber}
               pattern="[0-9]{11}"
               title="Enter valid contact number (ex - 94757713501)"
-              onChange={(e) => onChange(e)}
+              onChange={handleInputChange}
               placeholder="ex: 94757713501"
               required
             />
@@ -232,10 +201,10 @@ const AddEmployee = () => {
               type="text"
               className="form-control"
               name="designation"
-              value={designation}
+              value={currentEmployee.designation}
               pattern="[A-Za-z\s]{2,20}"
               title="The first designation must contain minimum 2 letters and maximum 20 letters"
-              onChange={(e) => onChange(e)}
+              onChange={handleInputChange}
               placeholder="ex: senior developer"
               required
             />
@@ -246,9 +215,9 @@ const AddEmployee = () => {
             <select
               id="inputEmployeeType"
               name="employeeType"
-              value={employeeType}
+              value={currentEmployee.employeeType}
               className="form-control"
-              onChange={(e) => onChange(e)}
+              onChange={handleInputChange}
               required
             >
               <option value="" selected disabled>select employee type</option>
@@ -262,14 +231,13 @@ const AddEmployee = () => {
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputJoinedDate">Joined Date *</label>
+            <label for="inputJoinedDate">Joined Date</label>
             <input
               type="date"
               className="form-control"
               name="joinedDate"
-              value={joinedDate}
-              onChange={(e) => onChange(e)}
-              required
+              value={currentEmployee.joinedDate}
+              onChange={handleInputChange}
             />
           </div>
 
@@ -278,9 +246,9 @@ const AddEmployee = () => {
             <select
               id="inputExperience"
               name="experience"
-              value={experience}
+              value={currentEmployee.experience}
               className="form-control"
-              onChange={(e) => onChange(e)}
+              onChange={handleInputChange}
               required
             >
               <option value="" selected disabled>select your experience</option>
@@ -294,18 +262,17 @@ const AddEmployee = () => {
 
         <div className="row">
           <div className="mb-3 col-lg-6 col-md-6 col-12">
-            <label for="inputSalary">Salary (Rs) *</label>
+            <label for="inputSalary">Salary (Rs)</label>
             <input
               type="number"
-              min="0" 
-              max="99999999" 
+              min="0"
+              max="99999999"
               step="1"
               className="form-control"
               name="salary"
-              value={salary}
-              onChange={(e) => onChange(e)}
+              value={currentEmployee.salary}
+              onChange={handleInputChange}
               placeholder="ex: 25000"
-              required
             />
           </div>
         </div>
@@ -314,22 +281,20 @@ const AddEmployee = () => {
           <label for="inputFullName">Personal Notes</label>
           <textarea
             name="note"
-            value={note}
+            value={currentEmployee.note}
             className="form-control"
-            onChange={(e) => onChange(e)}
-            placeholder="message.."
+            onChange={handleInputChange}
             cols="30"
             rows="3"
           ></textarea>
         </div>
 
-        <button type="submit" className="btn btn-primary">Add People</button>
+        <button type="submit" className="btn btn-primary">Update Employee</button>
         <button type="submit" className="btn btn-light" onClick={routeToHome}>Cancel</button>
 
       </form>
-      
     </div>
   );
 };
 
-export default AddEmployee;
+export default UpdateEmployee;

@@ -2,11 +2,12 @@
 import React from "react";
 
 const Navbar = () => {
+
   return (
     <div>
       <nav className="navbar navbar-light bg-light">
         <div className="nav">
-          <a className="navbar-brand" href="/">People</a>
+          <a className="navbar-brand" href="/">Employee</a>
         </div>
       </nav>
     </div>

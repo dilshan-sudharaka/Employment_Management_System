@@ -7,6 +7,7 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 import Navbar from './components/Navbar';
 import EmployeeList from './pages/EmployeeList';
 import AddEmployee from './pages/AddEmployee';
+import UpdateEmployee from "./pages/UpdateEmployee";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Routes>
         <Route path='/' element={<EmployeeList />} />
         <Route path='/addemployee' element={<AddEmployee />} />
+        <Route path='/updateemployee/:id' element={<UpdateEmployee />} />
         </Routes>
       </Router>
   );
